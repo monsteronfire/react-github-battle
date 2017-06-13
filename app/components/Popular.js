@@ -38,11 +38,7 @@ class Popular extends React.Component {
   }
 
   componentDidMount() {
-    //AJAX
-    api.fetchPopularRepos(this.state.selectedLanguage)
-      .then((repos) => {
-        console.log(repos);
-      })
+    this.updateLanguage(this.state.selectedLanguage);
   }
 
   updateLanguage(lang) {
@@ -51,6 +47,15 @@ class Popular extends React.Component {
         selectedLanguage: lang
       }
     });
+
+    api.fetchPopularRepos(lang)
+      .then((repos) => {
+        this.setState(() => {
+          return {
+            repos: repos
+          }
+        })
+      });
   }
 
   render() {
@@ -60,6 +65,7 @@ class Popular extends React.Component {
           selectedLanguage={this.state.selectedLanguage}
           onSelect={this.updateLanguage}
         />
+        {JSON.stringify(this.state.repos, null, 2)}
     </div>
     )
   }
